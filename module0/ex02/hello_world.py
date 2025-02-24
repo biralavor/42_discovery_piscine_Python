@@ -6,11 +6,11 @@
 #    By: umeneses <umeneses@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/24 11:40:06 by umeneses          #+#    #+#              #
-#    Updated: 2025/02/24 11:41:25 by umeneses         ###   ########.fr        #
+#    Updated: 2025/02/24 11:44:14 by umeneses         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 greet = 'Hello'
 place = 'World'
 
-print(f'{greet} {place}!')
+print(f'{greet}, {place}!')
