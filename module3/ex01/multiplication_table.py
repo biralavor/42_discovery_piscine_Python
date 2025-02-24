@@ -12,8 +12,6 @@
 #                                                                              #
 # **************************************************************************** #
 
-idx = 0
-result = 0
 while True :
   users_nbr = input('Enter a number: ')
   try :
@@ -21,7 +19,7 @@ while True :
     break
   except ValueError :
     print("Your input wasn't a number. Try again!")
-while idx < 10 :
+for idx in range(0, 10) :
   result = users_nbr * idx
   print(f'{idx} x {users_nbr} = {result}')
   idx += 1
