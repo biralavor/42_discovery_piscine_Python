@@ -15,4 +15,4 @@
 first_name = 'Bira'
 last_name = 'Lavor'
 
-print(f'{first_name} {last_name}')
+print(first_name, last_name)
