@@ -22,4 +22,5 @@ def table_of_nbr(nbr) :
 
 for nbr in range(0, 11) :
   table = table_of_nbr(nbr)
-  print(f'Table of {nbr}: {table}')
+  table_str = ' '.join(map(str, table))
+  print(f'Table of {nbr}: {table_str}')
