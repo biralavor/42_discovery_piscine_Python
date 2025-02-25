@@ -13,7 +13,7 @@
 # **************************************************************************** #
 
 users_first_name = input('Hey, what\'s your first name? : ')
-users_last_name = input('Hey, what\'s your last name? : ')
+users_last_name = input('Hey, what\'s your last name? : ').strip()
 greeting = 'Well, pleased to meet you,'
 
 print(f'{greeting} {users_first_name.strip()} {users_last_name}.')
