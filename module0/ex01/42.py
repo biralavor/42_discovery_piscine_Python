@@ -16,3 +16,4 @@ forty = 40
 two = 2
 
 print(forty + two)
+# print(forty + 2)
