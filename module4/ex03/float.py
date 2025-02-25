@@ -13,9 +13,12 @@
 # **************************************************************************** #
 
 def check_number_type(users_nbr) :
-  converted_nbr = str.format(users_nbr, None, 'x')
-  # converted_nbr = float(users_nbr)
-  print(f'The number {converted_nbr} is a float number.')
+  converted_nbr = float(users_nbr)
+  is_an_int = int(converted_nbr)
+  if is_an_int == converted_nbr :
+    print(f'The number {is_an_int} is an integer.')
+  else :
+    print(f'The number {converted_nbr} is a decimal.')
 
 def input_validation() :
   while True :
