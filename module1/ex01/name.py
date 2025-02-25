@@ -19,3 +19,4 @@ whitespace = ' '
 whole_name = first_name + whitespace + last_name
 
 print(whole_name)
+# print(first_name, last_name) // other method to print the whole name
