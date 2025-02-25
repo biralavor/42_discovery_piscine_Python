@@ -13,13 +13,14 @@
 # **************************************************************************** #
 
 def check_number_type(users_nbr) :
-  converted_nbr = str(users_nbr)
+  converted_nbr = str.format(users_nbr, None, 'x')
+  # converted_nbr = float(users_nbr)
   print(f'The number {converted_nbr} is a float number.')
 
 def input_validation() :
   while True :
     users_nbr = input('Give me a number: ')
-    if users_nbr.isnumeric() :
+    if users_nbr.isnumeric() or users_nbr.replace('.', '', 1).isnumeric() :
       break
     else :
       print('Only numbers are allowed. Try it again!')
