@@ -12,22 +12,21 @@
 #                                                                              #
 # **************************************************************************** #
 
-def remove_duplicates(arr) :
-  arr = list(set(arr))
-  return arr
-
-def _array_iterator(arr) :
-  arr_len = len(arr)
-  for idx in range (arr_len) :
-    if arr[idx] > 5 :
-      arr[idx] = arr[idx] + 2
-  return arr
+def set_iterator(cleaned_set) :
+  cleaned_list = list(cleaned_set)
+  for value in cleaned_list.copy() :
+    if value > 5 :
+      cleaned_list[cleaned_list.index(value)] += 2
+    else :
+      cleaned_list.remove(value)
+  print(f'Inside set_iterator: \t{cleaned_list}')
+  return set(cleaned_list)
 
 if __name__ == "__main__" :
-  new_arr = []
   original_arr = [2, 8, 9, 48, 8, 22, -12, 2]
-  new_arr = remove_duplicates(original_arr)
-  print(f'Original array: {original_arr}')
-  print(f'Removed array: {new_arr}')
-  new_arr = _array_iterator(new_arr)
-  print(f'Iterated array: {new_arr}')
+  arr_to_set = set(original_arr)
+  iterated_set = {}
+  print(f'Original array: \t{original_arr}')
+  print(f'Array to Set: \t\t{arr_to_set}')
+  iterated_set = set_iterator(arr_to_set)
+  print(f'Iterated set: \t\t{iterated_set}')
