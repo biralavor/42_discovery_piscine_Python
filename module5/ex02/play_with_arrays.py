@@ -25,5 +25,5 @@ def _array_iterator(original_arr) :
 if __name__ == "__main__" :
   original_arr = [2, 8, 9, 48, 8, 22, -12, 2]
   new_arr = _array_iterator(original_arr)
-  print(f'Original array: {original_arr}')
-  print(f'New array: {new_arr}')
+  print(f'Original array: \t{original_arr}')
+  print(f'New array: \t\t{new_arr}')
