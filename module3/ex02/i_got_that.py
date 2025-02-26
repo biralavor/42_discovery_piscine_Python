@@ -16,7 +16,7 @@ def replace_if_empty(saved_notes) :
   for idx in range(0, len(saved_notes)) :
     if saved_notes[idx] == '' :
       saved_notes.remove(saved_notes[idx])
-      saved_notes.insert(idx, ' :: empty slot ::')
+      saved_notes.insert(idx, ' ::  ::')
   return saved_notes
 
 def saved_notes_output(saved_notes) :
