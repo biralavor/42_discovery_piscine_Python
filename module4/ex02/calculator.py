@@ -31,7 +31,7 @@ def calculator(operation, first_nbr, second_nbr) :
   elif operation == 2 :
     return first_nbr - second_nbr
   elif operation == 3 :
-    return first_nbr // second_nbr
+    return first_nbr / second_nbr
   elif operation == 4 :
     return first_nbr * second_nbr
 
