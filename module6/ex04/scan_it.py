@@ -13,11 +13,17 @@
 # **************************************************************************** #
 
 import sys
+import re
 
 if __name__ == "__main__":
-  if len(sys.argv) > 2 :
-    param_len = len(sys.argv)
-    for idx in range (1, param_len) :
-      print(sys.argv[param_len - idx]) # This line is the only difference
+  if len(sys.argv) == 3 :
+    tofind = sys.argv[1]
+    bigger_txt = sys.argv[2]
+    result = re.findall(tofind, bigger_txt)
+    total_matches = len(result)
+    if result :
+      print(total_matches)
+    else :
+      print('none')
   else :
-    print("None")
+    print('none')
