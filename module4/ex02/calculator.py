@@ -12,8 +12,18 @@
 #                                                                              #
 # **************************************************************************** #
 
+def input_validation(nbr) :
+  while True :
+    users_nbr = input(f'Give me the {nbr} number: ')
+    if users_nbr.isnumeric() or users_nbr.replace('.', '', 1).isnumeric() :
+      break
+    else :
+      print('Only numbers are allowed. Try it again!')
+  return users_nbr
+
 def ask_number(nbr) :
-  return (int(input(f'Give me the {nbr} number: ')))
+  users_nbr = input_validation(nbr)
+  return int(users_nbr)
 
 def calculator(operation, first_nbr, second_nbr) :
   if operation == 1 :
