@@ -18,4 +18,4 @@ if __name__ == "__main__":
   if len(sys.argv) == 2 :
     print(sys.argv[1].upper())
   else :
-    print("None")
+    print('none')

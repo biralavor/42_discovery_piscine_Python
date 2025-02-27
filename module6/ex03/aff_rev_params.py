@@ -20,4 +20,4 @@ if __name__ == "__main__":
     for idx in range (1, param_len) :
       print(sys.argv[param_len - idx])
   else :
-    print("None")
+    print('none')
