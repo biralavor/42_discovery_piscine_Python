@@ -13,7 +13,6 @@
 # **************************************************************************** #
 
 import sys
-
 class ParamMatcher :
   def __init__(self, outside_param, input_param):
     self.input_param = input_param
@@ -32,6 +31,9 @@ if __name__ == "__main__" :
     outside_param = sys.argv[1]
     input_param = input("What was the parameter? ")
     parameter_matching = ParamMatcher(outside_param, input_param)
+  else :
+    print('none')
+    exit()
   while not parameter_matching.match() :
     input_param = input("What was the parameter? ")
     parameter_matching = ParamMatcher(outside_param, input_param)
