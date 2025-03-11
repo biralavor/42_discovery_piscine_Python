@@ -24,7 +24,8 @@ class scope_that:
     return nbr
 
   def add_one(self, nbr):
-    return nbr + 1
+    nbr += 1
+    return nbr
   
   def scope_init(self, user_input):
     validated_input = scope.input_validation(user_input)
