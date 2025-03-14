@@ -5,23 +5,169 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Python Immersion at 42 Discovery Piscine</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
   <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .status-container {
+      display: flex;
+      align-items: center;
+    }
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: red;
+      margin-right: 5px;
+    }
+  </style>
 </head>
 <body>
   <h1>Python Immersion at 42 Discovery Piscine</h1>
-  <p>Python is a high-level, interpreted, interactive and object-oriented scripting language. Python is designed to be highly readable. It uses English keywords frequently where as other languages use punctuation, and it has fewer syntactical constructions than other languages.</p>
-  <p>Python is a MUST for students and working professionals to become a great Software Engineer specially when they are working in Web Development Domain. I will list down some of the key advantages of learning Python:</p>
+  <p>Python is a high-level, interpreted, interactive and object-oriented scripting language. Python is designed to be highly readable. Python is a MUST for students and working professionals to become a great Software Engineer specially when they are working in Web Development Domain. I will list down some of the key advantages of learning Python:</p>
   <ul>
     <li>Python is Interpreted − Python is processed at runtime by the interpreter. You do not need to compile your program before executing it. This is similar to PERL and PHP.</li>
     <li>Python is Interactive − You can actually sit at a Python prompt and interact with the interpreter directly to write your programs.</li>
     <li>Python is Object-Oriented − Python supports Object-Oriented style or technique of programming that encapsulates code within objects.</li>
     <li>Python is a Beginner's Language − Python is a great language for the beginner-level programmers and supports the development of a wide range of applications from simple text processing to WWW browsers to games.</li>
     </ul>
-  <p>Python is a high-level, interpreted, interactive and object-oriented scripting language. Python is designed to be highly readable. It uses English keywords frequently where as other languages use punctuation, and it has fewer syntactical constructions than other languages.</p>
-  <p>Python is a MUST for students and working professionals to become a great Software Engineer specially when they are working in Web Development Domain. I will list down some of the key advantages of learning Python:</p>
+
+    <h1>Interactive Python Terminal</h1>
+    <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
+    <br>
+
+    <!-- Status sign and Start button in a flex container -->
+    <div class="status-container">
+      <div id="status-indicator" class="status-indicator"></div>
+      <!-- Button to start the interpreter -->
+      <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
+      <br><br>
+    </div>
+    <br><br>
+
+    
+    <!-- These buttons are initially disabled -->
+    <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
+    <button id="run-file" onclick="runPythonFile()" disabled>Run upcase_it.py</button>
+    <pre id="output"></pre>
+  
+    <!-- Modal for custom input -->
+    <div id="input-modal" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    background-color: #fff; border: 1px solid #ccc; padding: 20px; z-index: 1000;">
+    <p id="input-prompt"></p>
+    <input type="text" id="modal-input" style="width: 100%;"/>
+    <br><br>
+    <button onclick="submitModalInput()">Submit</button>
+    </div>
+
+    <script>
+      // Global variables for modal input handling
+      window.modalInputPromise = null;
+      window.resolveModalInput = null;
+
+      function submitModalInput() {
+        const inputVal = document.getElementById("modal-input").value;
+        if (window.resolveModalInput) {
+          window.resolveModalInput(inputVal);
+          document.getElementById("modal-input").value = "";
+          document.getElementById("input-modal").style.display = "none";
+        }
+      }
+
+      async function getModalInput(promptText) {
+        // Optionally, append the prompt text to your output area if you want it visible there:
+        document.getElementById("output").textContent += promptText;
+        // Set the prompt text inside the modal
+        document.getElementById("input-prompt").textContent = promptText;
+        // Show the modal
+        document.getElementById("input-modal").style.display = "block";
+        // Create and return a promise that resolves when the user submits input
+        window.modalInputPromise = new Promise((resolve) => {
+          window.resolveModalInput = resolve;
+        });
+        return await window.modalInputPromise;
+      }
+
+      async function setupCustomInput() {
+        // Override Python's input() with our custom function that uses the modal
+        await pyodide.runPythonAsync(`
+          import builtins
+          import js
+          import asyncio
+          
+          builtins.input = lambda prompt="": js.prompt(prompt)
+        `);
+      }
+
+      async function startInterpreter() {
+        // Load Pyodide if not already loaded
+        if (!window.pyodide) {
+          document.getElementById("start-interpreter").textContent = "Loading Pyodide...";
+          window.pyodide = await loadPyodide();
+          // Once loaded, change the status indicator to green
+          document.getElementById("status-indicator").style.backgroundColor = "green";
+          document.getElementById("start-interpreter").textContent = "Python Interpreter is Running";
+          // Set up custom input overriding input() with our modal-based function
+          await setupCustomInput();
+          // Enable the run buttons once the interpreter is ready
+          document.getElementById("run-text").disabled = false;
+          document.getElementById("run-file").disabled = false;
+        }
+      }
+  
+      async function runPython() {
+        // Ensure interpreter is ready
+        if (!window.pyodide) {
+          alert("Please start the Python interpreter first.");
+          return;
+        }
+        let code = document.getElementById("python-code").value;
+        try {
+          // Prepare a stdout capture
+          await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+            sys.stdout = StringIO()
+          `);
+          // Run the provided code
+          await pyodide.runPythonAsync(code);
+          // Retrieve the stdout content
+          let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
+          document.getElementById("output").textContent = output || "";
+        } catch (err) {
+          document.getElementById("output").textContent = err;
+        }
+      }
+  
+      async function runPythonFile() {
+        // Ensure interpreter is ready
+        if (!window.pyodide) {
+          alert("Please start the Python interpreter first.");
+          return;
+        }
+        try {
+          // Prepare stdout capture
+          await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+            sys.stdout = StringIO()
+          `);
+          // Adjust the file path according to your repository structure
+          const response = await fetch("/module8_Better_Classes/ex01/upcase_it.py");
+          if (!response.ok) throw new Error("File not found");
+          const code = await response.text();
+          // Run the fetched file code
+          await pyodide.runPythonAsync(code);
+          // Retrieve the stdout content
+          let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
+          document.getElementById("output").textContent = output || "";
+        } catch (err) {
+          document.getElementById("output").textContent = err;
+        }
+      }
+    </script>
   <ul>
   <main>
-    <p>This is the main reserved space</p>
+    <p>This is the main reserved space for more page content.</p>
   </main>
   <footer>
     <h6><p>Site Footer</p></h6>
