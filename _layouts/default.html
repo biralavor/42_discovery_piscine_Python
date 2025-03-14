@@ -32,9 +32,6 @@
     </ul>
 
     <h1>Interactive Python Terminal</h1>
-    <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
-    <br>
-
     <!-- Status sign and Start button in a flex container -->
     <div class="status-container">
       <div id="status-indicator" class="status-indicator"></div>
@@ -43,6 +40,9 @@
       <br><br>
     </div>
     <br><br>
+    <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
+    <br>
+
 
     
     <!-- These buttons are initially disabled -->
@@ -152,7 +152,7 @@
             sys.stdout = StringIO()
           `);
           // Adjust the file path according to your repository structure
-          const response = await fetch("/module8_Better_Classes/ex01/upcase_it.py");
+          const response = await fetch("../module8_Better_Classes/ex01/upcase_it.py");
           if (!response.ok) throw new Error("File not found");
           const code = await response.text();
           // Run the fetched file code
