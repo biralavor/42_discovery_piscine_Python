@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3.12
 
 # **************************************************************************** #
 #                                                                              #
@@ -13,20 +13,21 @@
 # **************************************************************************** #
 
 class ModifyAscii:
-  def __init__(self, name):
-    self.name = name
+  def __init__(self, old_input):
+    self.old_input = old_input
   
   def input_catcher(self):
     user_input = input("Please enter a string: ")
     return user_input
 
   def upcase_it(self):
-    self.name = self.name.upper()
-    return self.name
+    self.old_input = self.old_input.upper()
+    return self.old_input
 
 if __name__ == "__main__":
   user_input = ModifyAscii("")
-  name = user_input.input_catcher()
-  object_tobe_modified = ModifyAscii(name)
+  old_input = user_input.input_catcher()
+  object_tobe_modified = ModifyAscii(old_input)
   result = object_tobe_modified.upcase_it()
-  print(f"Here is the result >>> {result}")
+  print(f"Here was your input >>> {old_input}")
+  print(f"Here is the result  >>> {result}")
