@@ -138,6 +138,7 @@
         }
       }
   
+      const baseURL = "https://biralavor.github.io/42_discovery_piscine_Python";
       async function runPythonFile() {
         // Ensure interpreter is ready
         if (!window.pyodide) {
@@ -151,8 +152,8 @@
             from io import StringIO
             sys.stdout = StringIO()
           `);
-          // Adjust the file path according to your repository structure
-          const response = await fetch("../module8_Better_Classes/ex01/upcase_it.py");
+          // Concatenate the baseURL into the response.
+          const response = await fetch(baseURL + "/module8_Better_Classes/ex01/upcase_it.py");
           if (!response.ok) throw new Error("File not found");
           const code = await response.text();
           // Run the fetched file code
@@ -170,7 +171,7 @@
     <p>This is the main reserved space for more page content.</p>
   </main>
   <footer>
-    <h6><p>Site Footer</p></h6>
+    <h6><p>This is the site footer</p></h6>
   </footer>
 </body>
 </html>
