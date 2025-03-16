@@ -42,12 +42,12 @@ class MethodsEverywhere:
     for param in saved_params:
       if len(param) > MethodsEverywhere.MAX:
         result = self.shrink(param)
-        print(f"SHRINKING this input >>> {param}")
+        print(f"SHRINKING this input >>> [{param}] to fit the limit of {MethodsEverywhere.MAX}")
         print(f"  Here is the result >>> {result}")
         print("/////////")
       else:
         result = self.enlarge(param)
-        print(f"ENLARGING this input >>> {param}")
+        print(f"ENLARGING this input >>> [{param}] to fit the limit of {MethodsEverywhere.MAX}")
         print(f"  Here is the result >>> {result}")
         print("/////////")
 
