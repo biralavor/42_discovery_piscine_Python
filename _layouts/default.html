@@ -23,7 +23,7 @@
 </head>
 <body>
   <h1>Python Immersion at 42 Discovery Piscine</h1>
-  <p>Python is a high-level, interpreted, interactive and object-oriented scripting language. Python is designed to be highly readable. Python is a MUST for students and working professionals to become a great Software Engineer specially when they are working in Web Development Domain. I will list down some of the key advantages of learning Python:</p>
+  <p>Python is a high-level, interpreted, interactive, object-oriented scripting language and great for Software Engineer learners. I will list down some of the key advantages of learning Python:</p>
   <ul>
     <li>Python is Interpreted − Python is processed at runtime by the interpreter. You do not need to compile your program before executing it. This is similar to PERL and PHP.</li>
     <li>Python is Interactive − You can actually sit at a Python prompt and interact with the interpreter directly to write your programs.</li>
@@ -42,12 +42,20 @@
     <br><br>
     <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
     <br>
-
-
     
     <!-- These buttons are initially disabled -->
     <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
-    <button id="run-file" onclick="runPythonFile()" disabled>Run upcase_it.py</button>
+
+    
+    <!-- Dropdown for Study Files -->
+    <div id="study-files-dropdown-container">
+      <label for="study-files-dropdown">Select study file:</label>
+      <select id="study-files-dropdown">
+        <option value="">-- Select file to run --</option>
+      </select>
+      <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
+    </div>
+
     <pre id="output"></pre>
   
     <!-- Modal for custom input -->
@@ -137,10 +145,47 @@
           document.getElementById("output").textContent = err;
         }
       }
-  
+      // Global base URL for your GitHub Pages site
       const baseURL = "https://biralavor.github.io/42_discovery_piscine_Python";
-      async function runPythonFile() {
-        // Ensure interpreter is ready
+
+      // List of study file paths (relative to the baseURL)
+      const studyFiles = [
+        "module3_Better_Input_Validation/ex01/multiplication_table.py",
+        "module4_Simple_Methods/ex01/age.py",
+        "module3_Better_Input_Validation/ex02/i_got_that.py",
+        "module8_Better_Classes/ex01/upcase_it.py",
+        "module8_Better_Classes/ex03/greetings_for_all.py",
+        "module8_Better_Classes/ex05/scope_that.py"
+      ];
+
+      // Populate the dropdown with study files
+      function populateStudyFilesDropdown() {
+        const dropdown = document.getElementById("study-files-dropdown");
+        // Clear current options (if any) and add default option
+        dropdown.innerHTML = "<option value=''>-- Select file to run --</option>";
+        studyFiles.forEach((filePath) => {
+          const moduleName = (filePath.split('/').slice(-3, 5)[0]);
+          const fileName = filePath.split('/').pop();
+          const option = document.createElement("option");
+          option.value = filePath;
+          option.textContent = moduleName + " -> " + fileName;
+          dropdown.appendChild(option);
+        });
+      }
+
+      // Function to run the selected study file
+      async function runSelectedStudyFile() {
+        const dropdown = document.getElementById("study-files-dropdown");
+        const filePath = dropdown.value;
+        if (!filePath) {
+          alert("Please select a study file first.");
+          return;
+        }
+        await runStudyFile(filePath);
+      }
+
+      // New function to run a study file, given its file path (relative to baseURL).
+      async function runStudyFile(filePath) {
         if (!window.pyodide) {
           alert("Please start the Python interpreter first.");
           return;
@@ -152,19 +197,22 @@
             from io import StringIO
             sys.stdout = StringIO()
           `);
-          // Concatenate the baseURL into the response.
-          const response = await fetch(baseURL + "/module8_Better_Classes/ex01/upcase_it.py");
+          // Fetch the file using the base URL and provided file path
+          const response = await fetch(baseURL + "/" + filePath);
           if (!response.ok) throw new Error("File not found");
           const code = await response.text();
           // Run the fetched file code
           await pyodide.runPythonAsync(code);
-          // Retrieve the stdout content
+          // Retrieve the stdout content and display it
           let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
           document.getElementById("output").textContent = output || "";
         } catch (err) {
           document.getElementById("output").textContent = err;
         }
       }
+
+      // Initialize the dropdown when the document loads.
+      populateStudyFilesDropdown();
     </script>
   <ul>
   <main>
