@@ -39,6 +39,7 @@ class MethodsEverywhere:
   
   def automate_method(self):
     # saved_params = self.param_catcher()
+    saved_params = input("Enter one string: ")
     for param in saved_params:
       if len(param) > MethodsEverywhere.MAX:
         result = self.shrink(param)
