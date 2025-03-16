@@ -44,5 +44,6 @@ if __name__ == "__main__":
   # name.greetings()
   # name = GreetingsForAll(42)
   # name.greetings()
-  name = GreetingsForAll(input("What's your name? You can also say a number or nothing."))
+  user_input = input("What's your name? You can also say a number or nothing.")
+  name = GreetingsForAll(user_input)
   name.greetings()
