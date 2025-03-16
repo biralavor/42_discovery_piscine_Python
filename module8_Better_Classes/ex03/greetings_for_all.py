@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3.12
 
 # **************************************************************************** #
 #                                                                              #
@@ -17,9 +17,16 @@ class GreetingsForAll:
     self.name = name
 
   def input_validation(self):
-    if isinstance(self.name, int):
+
+    try:
+      int(self.name)
+      is_int = True
+    except ValueError:
+      is_int = False
+    # if isinstance(self.name, int):
+    if is_int:
       name = -2
-    elif self.name == '':
+    elif self.name == '' and not is_int:
       name = -1
     else:
       name = self.name
@@ -28,7 +35,7 @@ class GreetingsForAll:
   def greetings(self):
     name = self.input_validation()
     if name == -2:
-      print("Error! It was not a name.")
+      print("Sorry! This is not a name.")
     elif name == -1:
       name = "noble stranger"
       print(f"Hello, {name}!")
@@ -44,6 +51,6 @@ if __name__ == "__main__":
   # name.greetings()
   # name = GreetingsForAll(42)
   # name.greetings()
-  user_input = input("What's your name? You can also say a number or nothing.")
+  user_input = input("What's your name? (You can also say a number or nothing) ")
   name = GreetingsForAll(user_input)
   name.greetings()
