@@ -26,7 +26,7 @@ class GreetingsForAll:
     return name
 
   def greetings(self):
-    name = self.input_validation("What's your name? You can also say a number or nothing.")
+    name = self.input_validation()
     if name == -2:
       print("Error! It was not a name.")
     elif name == -1:
@@ -44,5 +44,5 @@ if __name__ == "__main__":
   # name.greetings()
   # name = GreetingsForAll(42)
   # name.greetings()
-  name = GreetingsForAll(input())
+  name = GreetingsForAll(input("What's your name? You can also say a number or nothing."))
   name.greetings()
