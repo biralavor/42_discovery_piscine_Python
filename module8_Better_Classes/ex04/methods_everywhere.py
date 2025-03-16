@@ -20,11 +20,11 @@ class MethodsEverywhere:
   def __init__(self, outside_param):
     self.outside_param = outside_param
 
-  def param_catcher(self):
-    outside_param = []
-    for idx in range(1, len(sys.argv)):
-      outside_param.append(sys.argv[idx])
-    return outside_param
+  # def param_catcher(self):
+  #   outside_param = []
+  #   for idx in range(1, len(sys.argv)):
+  #     outside_param.append(sys.argv[idx])
+  #   return outside_param
 
   def shrink(self, one_param):
     sliced_limit = slice(0, MethodsEverywhere.MAX)
@@ -38,7 +38,7 @@ class MethodsEverywhere:
     return one_param
   
   def automate_method(self):
-    saved_params = self.param_catcher()
+    # saved_params = self.param_catcher()
     for param in saved_params:
       if len(param) > MethodsEverywhere.MAX:
         result = self.shrink(param)
