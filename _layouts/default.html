@@ -54,12 +54,7 @@
   <!-- These buttons are initially disabled -->
   <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
   
-  <!-- Container for "Show Me This Code" button and source code display -->
-  <div id="code-container" style="margin-top:20px; display: none;">
-    <button id="show-code" disabled onclick="showSourceCode()">Show Me This Code</button>
-    <button id="close-code" disabled onclick="closeSourceCode()">Close this Code</button>
-    <pre id="source-code"></pre>
-  </div>
+  
 
   <!-- Dropdown for Study Files -->
   <div id="study-files-dropdown-container">
@@ -258,6 +253,12 @@
 
   <main>
     <p>This is the main reserved space for more page content.</p>
+    <!-- Container for "Show Me This Code" button and source code display -->
+    <div id="code-container" style="margin-top:20px; display: none;">
+      <button id="show-code" disabled onclick="showSourceCode()">Show Me This Code</button>
+      <button id="close-code" disabled onclick="closeSourceCode()">Close this Code</button>
+      <pre id="source-code"></pre>
+    </div>
   </main>
 
   <footer>
