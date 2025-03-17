@@ -19,205 +19,230 @@
       background-color: red;
       margin-right: 5px;
     }
+    /* Optional: simple styling for source code display */
+    #source-code {
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 10px;
+      overflow-x: auto;
+      white-space: pre;
+      font-family: Consolas, monospace;
+    }
   </style>
 </head>
 <body>
   <h1>Python Immersion at 42 Discovery Piscine</h1>
   <p>Python is a high-level, interpreted, interactive, object-oriented scripting language and great for Software Engineer learners. I will list down some of the key advantages of learning Python:</p>
   <ul>
-    <li>Python is Interpreted − Python is processed at runtime by the interpreter. You do not need to compile your program before executing it. This is similar to PERL and PHP.</li>
-    <li>Python is Interactive − You can actually sit at a Python prompt and interact with the interpreter directly to write your programs.</li>
-    <li>Python is Object-Oriented − Python supports Object-Oriented style or technique of programming that encapsulates code within objects.</li>
-    <li>Python is a Beginner's Language − Python is a great language for the beginner-level programmers and supports the development of a wide range of applications from simple text processing to WWW browsers to games.</li>
-    </ul>
+    <li>Python is Interpreted − Processed at runtime; no prior compile.</li>
+    <li>Python is Interactive − Direct interaction with a prompt.</li>
+    <li>Python is Object-Oriented − Encapsulates code in objects.</li>
+    <li>Python is a Beginner's Language − Supports a wide range of applications.</li>
+  </ul>
 
-    <h1>Interactive Python Terminal</h1>
-    <!-- Status sign and Start button in a flex container -->
-    <div class="status-container">
-      <div id="status-indicator" class="status-indicator"></div>
-      <!-- Button to start the interpreter -->
-      <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
-      <br><br>
-    </div>
-    <br><br>
-    <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
-    <br>
-    
-    <!-- These buttons are initially disabled -->
-    <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
-
-    
-    <!-- Dropdown for Study Files -->
-    <div id="study-files-dropdown-container">
-      <label for="study-files-dropdown">Select study file:</label>
-      <select id="study-files-dropdown">
-        <option value="">-- Select file to run --</option>
-      </select>
-      <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
-    </div>
-
-    <pre id="output"></pre>
+  <h1>Interactive Python Terminal</h1>
+  <!-- Status sign and Start button in a flex container -->
+  <div class="status-container">
+    <div id="status-indicator" class="status-indicator"></div>
+    <!-- Button to start the interpreter -->
+    <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
+  </div>
+  <br><br>
+  <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
+  <br>
   
-    <!-- Modal for custom input -->
-    <div id="input-modal" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  <!-- These buttons are initially disabled -->
+  <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
+  
+  <!-- Container for "Show Me This Code" button and source code display -->
+  <div id="code-container" style="margin-top:20px; display: none;">
+    <button id="show-code" disabled onclick="showSourceCode()">Show Me This Code</button>
+    <pre id="source-code"></pre>
+  </div>
+
+  <!-- Dropdown for Study Files -->
+  <div id="study-files-dropdown-container">
+    <label for="study-files-dropdown">Select study file:</label>
+    <select id="study-files-dropdown">
+      <option value="">-- Select file to run --</option>
+    </select>
+    <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
+  </div>
+
+  <pre id="output"></pre>
+
+  <!-- Modal for custom input (if needed) -->
+  <div id="input-modal" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
     background-color: #fff; border: 1px solid #ccc; padding: 20px; z-index: 1000;">
     <p id="input-prompt"></p>
     <input type="text" id="modal-input" style="width: 100%;"/>
     <br><br>
     <button onclick="submitModalInput()">Submit</button>
-    </div>
+  </div>
 
-    <script>
-      // Global variables for modal input handling
-      window.modalInputPromise = null;
-      window.resolveModalInput = null;
+  <script>
+    // Global variables for modal input handling
+    window.modalInputPromise = null;
+    window.resolveModalInput = null;
+    // Store current study file that was successfully run
+    let currentStudyFile = "";
 
-      function submitModalInput() {
-        const inputVal = document.getElementById("modal-input").value;
-        if (window.resolveModalInput) {
-          window.resolveModalInput(inputVal);
-          document.getElementById("modal-input").value = "";
-          document.getElementById("input-modal").style.display = "none";
-        }
+    function submitModalInput() {
+      const inputVal = document.getElementById("modal-input").value;
+      if (window.resolveModalInput) {
+        window.resolveModalInput(inputVal);
+        document.getElementById("modal-input").value = "";
+        document.getElementById("input-modal").style.display = "none";
       }
+    }
 
-      async function getModalInput(promptText) {
-        // Optionally, append the prompt text to your output area if you want it visible there:
-        document.getElementById("output").textContent += promptText;
-        // Set the prompt text inside the modal
-        document.getElementById("input-prompt").textContent = promptText;
-        // Show the modal
-        document.getElementById("input-modal").style.display = "block";
-        // Create and return a promise that resolves when the user submits input
-        window.modalInputPromise = new Promise((resolve) => {
-          window.resolveModalInput = resolve;
-        });
-        return await window.modalInputPromise;
+    async function getModalInput(promptText) {
+// Optionally, append the prompt text to your output area if you want it visible there:
+      document.getElementById("output").textContent += promptText;
+// Set the prompt text inside the modal
+      document.getElementById("input-prompt").textContent = promptText;
+// Show the modal
+      document.getElementById("input-modal").style.display = "block";
+      window.modalInputPromise = new Promise((resolve) => {
+        window.resolveModalInput = resolve;
+      });
+      return await window.modalInputPromise;
+    }
+    
+    async function setupCustomInput() {
+      // Here you could override input() if using a modal; for now we use js.prompt synchronously.
+      await pyodide.runPythonAsync(`
+        import builtins
+        import js
+        import asyncio
+        builtins.input = lambda prompt="": js.prompt(prompt)
+      `);
+    }
+
+    async function startInterpreter() {
+      // Load Pyodide if not already loaded, and display a green light indicator
+      if (!window.pyodide) {
+        document.getElementById("start-interpreter").textContent = "Loading Pyodide...";
+        window.pyodide = await loadPyodide();
+        document.getElementById("status-indicator").style.backgroundColor = "green";
+        document.getElementById("start-interpreter").textContent = "Python Interpreter is Running";
+        await setupCustomInput();
+        document.getElementById("run-text").disabled = false;
       }
+    }
 
-      async function setupCustomInput() {
-        // Override Python's input() with our custom function that uses the modal
+    async function runPython() {
+      if (!window.pyodide) {
+        alert("Please start the Python interpreter first.");
+        return;
+      }
+      let code = document.getElementById("python-code").value;
+      try {
+        // Prepare a stdout capture
         await pyodide.runPythonAsync(`
-          import builtins
-          import js
-          import asyncio
-          
-          builtins.input = lambda prompt="": js.prompt(prompt)
+          import sys
+          from io import StringIO
+          sys.stdout = StringIO()
         `);
+        await pyodide.runPythonAsync(code);
+        let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
+        document.getElementById("output").textContent = output || "";
+      } catch (err) {
+        document.getElementById("output").textContent = err;
       }
+    }
 
-      async function startInterpreter() {
-        // Load Pyodide if not already loaded
-        if (!window.pyodide) {
-          document.getElementById("start-interpreter").textContent = "Loading Pyodide...";
-          window.pyodide = await loadPyodide();
-          // Once loaded, change the status indicator to green
-          document.getElementById("status-indicator").style.backgroundColor = "green";
-          document.getElementById("start-interpreter").textContent = "Python Interpreter is Running";
-          // Set up custom input overriding input() with our modal-based function
-          await setupCustomInput();
-          // Enable the run buttons once the interpreter is ready
-          document.getElementById("run-text").disabled = false;
-          document.getElementById("run-file").disabled = false;
-        }
+    // Global base URL for your GitHub Pages site
+    const baseURL = "https://biralavor.github.io/42_discovery_piscine_Python";
+
+    // List of study file paths (relative to the baseURL)
+    const studyFiles = [
+      "module3_Better_Input_Validation/ex01/multiplication_table.py",
+      "module4_Simple_Methods/ex01/age.py",
+      "module3_Better_Input_Validation/ex02/i_got_that.py",
+      "module8_Better_Classes/ex01/upcase_it.py",
+      "module8_Better_Classes/ex03/greetings_for_all.py",
+      "module8_Better_Classes/ex05/scope_that.py"
+    ];
+
+    // Populate the dropdown with study files
+    function populateStudyFilesDropdown() {
+      const dropdown = document.getElementById("study-files-dropdown");
+      dropdown.innerHTML = "<option value=''>-- Select file to run --</option>";
+      studyFiles.forEach((filePath) => {
+        const moduleName = (filePath.split('/').slice(-3, 5)[0]);
+        const fileName = filePath.split('/').pop();
+        const option = document.createElement("option");
+        option.value = filePath;
+        option.textContent = moduleName + " -> " + fileName;
+        dropdown.appendChild(option);
+      });
+    }
+
+    // Function to run the selected study file
+    async function runSelectedStudyFile() {
+      const dropdown = document.getElementById("study-files-dropdown");
+      const filePath = dropdown.value;
+      if (!filePath) {
+        alert("Please select a study file first.");
+        return;
       }
-  
-      async function runPython() {
-        // Ensure interpreter is ready
-        if (!window.pyodide) {
-          alert("Please start the Python interpreter first.");
-          return;
-        }
-        let code = document.getElementById("python-code").value;
-        try {
-          // Prepare a stdout capture
-          await pyodide.runPythonAsync(`
-            import sys
-            from io import StringIO
-            sys.stdout = StringIO()
-          `);
-          // Run the provided code
-          await pyodide.runPythonAsync(code);
-          // Retrieve the stdout content
-          let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
-          document.getElementById("output").textContent = output || "";
-        } catch (err) {
-          document.getElementById("output").textContent = err;
-        }
+      await runStudyFile(filePath);
+    }
+
+    // Function to run a study file given its file path (relative to baseURL)
+    async function runStudyFile(filePath) {
+      if (!window.pyodide) {
+        alert("Please start the Python interpreter first.");
+        return;
       }
-      // Global base URL for your GitHub Pages site
-      const baseURL = "https://biralavor.github.io/42_discovery_piscine_Python";
-
-      // List of study file paths (relative to the baseURL)
-      const studyFiles = [
-        "module3_Better_Input_Validation/ex01/multiplication_table.py",
-        "module4_Simple_Methods/ex01/age.py",
-        "module3_Better_Input_Validation/ex02/i_got_that.py",
-        "module8_Better_Classes/ex01/upcase_it.py",
-        "module8_Better_Classes/ex03/greetings_for_all.py",
-        "module8_Better_Classes/ex05/scope_that.py"
-      ];
-
-      // Populate the dropdown with study files
-      function populateStudyFilesDropdown() {
-        const dropdown = document.getElementById("study-files-dropdown");
-        // Clear current options (if any) and add default option
-        dropdown.innerHTML = "<option value=''>-- Select file to run --</option>";
-        studyFiles.forEach((filePath) => {
-          const moduleName = (filePath.split('/').slice(-3, 5)[0]);
-          const fileName = filePath.split('/').pop();
-          const option = document.createElement("option");
-          option.value = filePath;
-          option.textContent = moduleName + " -> " + fileName;
-          dropdown.appendChild(option);
-        });
+      try {
+        await pyodide.runPythonAsync(`
+          import sys
+          from io import StringIO
+          sys.stdout = StringIO()
+        `);
+        const response = await fetch(baseURL + "/" + filePath);
+        if (!response.ok) throw new Error("File not found");
+        const code = await response.text();
+        await pyodide.runPythonAsync(code);
+        let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
+        document.getElementById("output").textContent = output || "";
+        // Save this file path as the current study file
+        currentStudyFile = filePath;
+        // Enable and show the "Show Me This Code" button
+        document.getElementById("show-code").disabled = false;
+        document.getElementById("code-container").style.display = "block";
+      } catch (err) {
+        document.getElementById("output").textContent = err;
+        document.getElementById("show-code").disabled = true;
       }
+    }
 
-      // Function to run the selected study file
-      async function runSelectedStudyFile() {
-        const dropdown = document.getElementById("study-files-dropdown");
-        const filePath = dropdown.value;
-        if (!filePath) {
-          alert("Please select a study file first.");
-          return;
-        }
-        await runStudyFile(filePath);
+    // Function to fetch and display the current file's source code
+    async function showSourceCode() {
+      if (!currentStudyFile) {
+        alert("No study file was run yet.");
+        return;
       }
-
-      // New function to run a study file, given its file path (relative to baseURL).
-      async function runStudyFile(filePath) {
-        if (!window.pyodide) {
-          alert("Please start the Python interpreter first.");
-          return;
-        }
-        try {
-          // Prepare stdout capture
-          await pyodide.runPythonAsync(`
-            import sys
-            from io import StringIO
-            sys.stdout = StringIO()
-          `);
-          // Fetch the file using the base URL and provided file path
-          const response = await fetch(baseURL + "/" + filePath);
-          if (!response.ok) throw new Error("File not found");
-          const code = await response.text();
-          // Run the fetched file code
-          await pyodide.runPythonAsync(code);
-          // Retrieve the stdout content and display it
-          let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
-          document.getElementById("output").textContent = output || "";
-        } catch (err) {
-          document.getElementById("output").textContent = err;
-        }
+      try {
+        const response = await fetch(baseURL + "/" + currentStudyFile);
+        if (!response.ok) throw new Error("File not found");
+        const code = await response.text();
+        document.getElementById("source-code").textContent = code;
+      } catch (err) {
+        document.getElementById("source-code").textContent = err;
       }
+    }
 
-      // Initialize the dropdown when the document loads.
-      populateStudyFilesDropdown();
-    </script>
-  <ul>
+    // On page load, populate the dropdown menu.
+    populateStudyFilesDropdown();
+  </script>
+
   <main>
     <p>This is the main reserved space for more page content.</p>
   </main>
+
   <footer>
     <h6><p>This is the site footer</p></h6>
   </footer>
