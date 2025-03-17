@@ -57,6 +57,7 @@
   <!-- Container for "Show Me This Code" button and source code display -->
   <div id="code-container" style="margin-top:20px; display: none;">
     <button id="show-code" disabled onclick="showSourceCode()">Show Me This Code</button>
+    <button id="close-code" disabled onclick="closeSourceCode()">Close this Code</button>
     <pre id="source-code"></pre>
   </div>
 
@@ -213,6 +214,7 @@
         // Enable and show the "Show Me This Code" button
         document.getElementById("show-code").disabled = false;
         document.getElementById("code-container").style.display = "block";
+        document.getElementById("close-code").disabled = true;
       } catch (err) {
         document.getElementById("output").textContent = err;
         document.getElementById("show-code").disabled = true;
@@ -230,10 +232,22 @@
         if (!response.ok) throw new Error("File not found");
         const code = await response.text();
         document.getElementById("source-code").textContent = code;
+        // Enable the "Close this Code" button after displaying the code.
+        document.getElementById("close-code").disabled = false;
       } catch (err) {
         document.getElementById("source-code").textContent = err;
-      }
     }
+    }
+
+    // New function to clear the code-container
+    function closeSourceCode() {
+        // Clear the pre block content
+        document.getElementById("source-code").textContent = "";
+        // Hide the container
+        document.getElementById("code-container").style.display = "none";
+        // Disable the close-code button
+        document.getElementById("close-code").disabled = true;
+      }
 
     // On page load, populate the dropdown menu.
     populateStudyFilesDropdown();
