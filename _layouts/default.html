@@ -206,13 +206,45 @@
         const code = await response.text();
         await pyodide.runPythonAsync(code);
         let output = await pyodide.runPythonAsync("sys.stdout.getvalue()");
-        document.getElementById("output").textContent = output || "";
-        // Save this file path as the current study file
+        // Save file path as current study file for "Show Me This Code"
         currentStudyFile = filePath;
-        // Enable and show the "Show Me This Code" button
+        // Enable the "Show Me This Code" button and show the code container (if not already visible)
         document.getElementById("show-code").disabled = false;
         document.getElementById("code-container").style.display = "block";
         document.getElementById("close-code").disabled = true;
+        
+        // Create a new dynamic output container with a close button
+        const dynamicContainer = document.createElement("div");
+        dynamicContainer.style.border = "1px solid #ccc";
+        dynamicContainer.style.background = "#f9f9f9";
+        dynamicContainer.style.padding = "10px";
+        dynamicContainer.style.marginTop = "10px";
+        dynamicContainer.style.position = "relative";
+        
+        // Create a close button for this dynamic container
+        const closeBtn = document.createElement("button");
+        closeBtn.textContent = "Close this Output";
+        closeBtn.style.position = "absolute";
+        closeBtn.style.top = "5px";
+        closeBtn.style.right = "5px";
+        closeBtn.onclick = function() {
+          dynamicContainer.parentNode.removeChild(dynamicContainer);
+        };
+        
+        // Create a pre element to hold the output code text
+        const preOutput = document.createElement("pre");
+        preOutput.style.whiteSpace = "pre";
+        preOutput.style.fontFamily = "Consolas, monospace";
+        preOutput.style.overflowX = "auto";
+        preOutput.textContent = output || "";
+        
+        // Append the close button and pre to the dynamic container
+        dynamicContainer.appendChild(closeBtn);
+        dynamicContainer.appendChild(preOutput);
+        
+        // Append the dynamic container to a dedicated parent container
+        document.getElementById("dynamic-output-container").appendChild(dynamicContainer);
+        
       } catch (err) {
         document.getElementById("output").textContent = err;
         document.getElementById("show-code").disabled = true;
@@ -253,6 +285,9 @@
 
   <main>
     <p>This is the main reserved space for more page content.</p>
+    <!-- Add a container in your HTML where dynamic outputs will be appended -->
+    <div id="dynamic-output-container" style="margin-top:20px;"></div>
+
     <!-- Container for "Show Me This Code" button and source code display -->
     <div id="code-container" style="margin-top:20px; display: none;">
       <button id="show-code" disabled onclick="showSourceCode()">Show Me This Code</button>
