@@ -18,6 +18,7 @@
       border-radius: 50%;
       background-color: red;
       margin-right: 5px;
+      margin-left: 5px;
     }
     /* Optional: simple styling for source code display */
     #source-code {
@@ -43,25 +44,23 @@
   <h2>Interactive Python Terminal</h2>
   <!-- Status sign and Start button in a flex container -->
   <div class="status-container">
+    <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
     <div id="status-indicator" class="status-indicator"></div>
     <!-- Button to start the interpreter -->
-    <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
   </div>
+  <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
   <br><br>
   <textarea id="user-python-code" rows="7" cols="45">Teste here</textarea>
   <br>
   
   <!-- These buttons are initially disabled -->
-  <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
   <pre id="output"></pre>
   
-  
-
   <!-- Dropdown for Study Files -->
   <div id="study-files-dropdown-container">
     <label for="study-files-dropdown">Select a study file:</label>
     <select id="study-files-dropdown">
-      <option value="">-- Select file to run --</option>
+      <option value="">-- Choose here one of my Python study files --</option>
     </select>
     <button onclick="runSelectedStudyFile()">Run this one!</button>
   </div>
@@ -80,9 +79,9 @@
     // Global variables for modal input handling
     window.modalInputPromise = null;
     window.resolveModalInput = null;
-    document.getElementById("user-python-code").value = `
-greeting_msg= "Hi! This is Bira Lavor!"
-lenght_msg = len(greeting_msg) + 2
+    document.getElementById("user-python-code")
+    .value = `greeting_msg= "Hi! This is Bira Lavor!"
+lenght_msg = len(greeting_msg) + 3
 for idx in range(lenght_msg):
   print("*", end="")
   if idx == lenght_msg - 1:
