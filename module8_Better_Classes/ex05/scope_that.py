@@ -1,4 +1,4 @@
-#!/usr/bin/python3.7
+#!/usr/bin/python3.12
 
 # **************************************************************************** #
 #                                                                              #
@@ -12,29 +12,37 @@
 #                                                                              #
 # **************************************************************************** #
 
-class scope_that:
-  def __init__(self):
-    pass
+import sys
 
-  def input_validation(self, user_input):
-    try:
-      nbr = (int(user_input))
-    except ValueError:
-      raise ValueError("Please enter a number")
+class scopeThat:
+  def __init__(self, user_input):
+    self.user_input = user_input
+
+  def input_catcher(self):
+    user_input = input("Enter a number (I'll increment it using 'classes'): ")
+    return user_input
+
+  def input_validation(self):
+    while True:
+      nbr = self.input_catcher()
+      try:
+        nbr = (int(nbr))
+        break
+      except ValueError:
+        sys.stderr.write(f"'{nbr}' wasn't a number. Try again!\n")
     return nbr
 
-  def add_one(self, nbr):
+  def increment_one(self, nbr):
     nbr += 1
     return nbr
   
   def scope_init(self, user_input):
-    validated_input = scope.input_validation(user_input)
-    result = scope.add_one(validated_input)
+    result = self.increment_one(user_input)
     return result
 
 if __name__ == "__main__":
-  user_input = 42
-  scope = scope_that()
-  result = scope.scope_init(user_input)
-  print(f"Here was value at main >>> {user_input}")
-  print(f"Here is the result >>>>>>> {result}")
+  arg_input = scopeThat("")
+  nbr = arg_input.input_validation()
+  result = arg_input.scope_init(nbr)
+  print(f"Here was your original value >>>>> {nbr}")
+  print(f"Here is the incremented result >>> {result}")
