@@ -12,15 +12,31 @@
 #                                                                              #
 # **************************************************************************** #
 
-while True :
-  users_nbr = input('Enter a number: ')
-  try :
-    users_nbr = int(users_nbr)
-    break
-  except ValueError :
-    print("Your input wasn't a number. Try again!")
-for idx in range(0, 10) :
-  result = users_nbr * idx
-  print(f'{idx} x {users_nbr} = {result}')
-  idx += 1
-exit()
+class multiplicationTable:
+  def __init__(self, user_input):
+    self.user_input = user_input
+
+  def input_catcher(self):
+    user_input = input('Enter a number: ')
+    return user_input
+
+  def input_validation(self):
+    while True :
+      try :
+        nbr = int(self.input_catcher())
+        break
+      except ValueError :
+        print("Your input wasn't a number. Try again!")
+    return nbr
+
+  def multiplyIt(self, nbr):
+    for idx in range(0, 10) :
+      result = nbr * idx
+      print(f'{idx} x {nbr} = {result}')
+      idx += 1
+
+if __name__ == "__main__":
+  arg_input = multiplicationTable("")
+  nbr = arg_input.input_validation()
+  print(f"Here is the Multiplication Table for {nbr}:")
+  arg_input.multiplyIt(nbr)
