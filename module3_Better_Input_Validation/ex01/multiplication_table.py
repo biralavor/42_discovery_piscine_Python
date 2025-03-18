@@ -1,4 +1,4 @@
-#!/usr/bin/python3.8
+#!/usr/bin/python3.12
 
 # **************************************************************************** #
 #                                                                              #
@@ -12,6 +12,7 @@
 #                                                                              #
 # **************************************************************************** #
 
+import sys
 class multiplicationTable:
   def __init__(self, user_input):
     self.user_input = user_input
@@ -26,7 +27,7 @@ class multiplicationTable:
         nbr = int(self.input_catcher())
         break
       except ValueError :
-        print("Your input wasn't a number. Try again!")
+        sys.stderr.write("Your input wasn't a number. Try again!\n")
     return nbr
 
   def multiplyIt(self, nbr):
