@@ -40,7 +40,7 @@
     <li>Python is a Beginner's Language − Supports a wide range of applications.</li>
   </ul>
 
-  <h1>Interactive Python Terminal</h1>
+  <h2>Interactive Python Terminal</h2>
   <!-- Status sign and Start button in a flex container -->
   <div class="status-container">
     <div id="status-indicator" class="status-indicator"></div>
@@ -48,11 +48,12 @@
     <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
   </div>
   <br><br>
-  <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
+  <textarea id="user-python-code" rows="7" cols="45">Teste here</textarea>
   <br>
   
   <!-- These buttons are initially disabled -->
   <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
+  <pre id="output"></pre>
   
   
 
@@ -65,7 +66,6 @@
     <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
   </div>
 
-  <pre id="output"></pre>
 
   <!-- Modal for custom input (if needed) -->
   <div id="input-modal" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -93,11 +93,11 @@
     }
 
     async function getModalInput(promptText) {
-// Optionally, append the prompt text to your output area if you want it visible there:
+      // Optionally, append the prompt text to your output area if you want it visible there:
       document.getElementById("output").textContent += promptText;
-// Set the prompt text inside the modal
+      // Set the prompt text inside the modal
       document.getElementById("input-prompt").textContent = promptText;
-// Show the modal
+      // Show the modal
       document.getElementById("input-modal").style.display = "block";
       window.modalInputPromise = new Promise((resolve) => {
         window.resolveModalInput = resolve;
@@ -115,6 +115,49 @@
       `);
     }
 
+    // A JavaScript function to show an error in your dialog box.
+    function showErrorDialog(msg) {
+      // Clear any previous output if desired
+      document.getElementById("output").textContent = "";
+      // Show the error message via an alert or update a dedicated error container.
+      alert("Invalid input -> " + msg);
+    }
+
+    async function setupCustomInputAndPrintOverride() {
+      // Override input (if desired) and print. The new print will forward messages that contain
+      // "Your input wasn't a number" to our showErrorDialog() JS function.
+      await pyodide.runPythonAsync(`
+        import builtins, js, sys
+
+        # Save the original print if not already saved.
+        if not hasattr(builtins, '__original_print'):
+            builtins.__original_print = print
+
+        def custom_print(*args, **kwargs):
+            s = " ".join(str(arg) for arg in args)
+            # Forward errors with the specific message to JS
+            if "Your input wasn't a number" in s:
+                js.showErrorDialog(s)
+            builtins.__original_print(*args, **kwargs)
+
+        builtins.print = custom_print
+
+        # Use js.prompt as a synchronous input for now.
+        builtins.input = lambda prompt="": js.prompt(prompt)
+
+        # Create a custom stderr redirector that calls our JS function.
+        class JSStdErr:
+            def write(self, s):
+                if s.strip():
+                    # Optionally, clear prior output
+                    js.showErrorDialog(s)
+            def flush(self):
+                pass
+
+        sys.stderr = JSStdErr()
+      `);
+    }
+
     async function startInterpreter() {
       // Load Pyodide if not already loaded, and display a green light indicator
       if (!window.pyodide) {
@@ -122,7 +165,8 @@
         window.pyodide = await loadPyodide();
         document.getElementById("status-indicator").style.backgroundColor = "green";
         document.getElementById("start-interpreter").textContent = "Python Interpreter is Running";
-        await setupCustomInput();
+        // await setupCustomInput();
+        await setupCustomInputAndPrintOverride();
         document.getElementById("run-text").disabled = false;
       }
     }
@@ -132,7 +176,7 @@
         alert("Please start the Python interpreter first.");
         return;
       }
-      let code = document.getElementById("python-code").value;
+      let code = document.getElementById("user-python-code").value;
       try {
         // Prepare a stdout capture
         await pyodide.runPythonAsync(`
@@ -156,9 +200,9 @@
       "----working----",
       "module8_Better_Classes/ex03/greetings_for_all.py",
       "module8_Better_Classes/ex01/upcase_it.py",
+      "module3_Better_Input_Validation/ex01/multiplication_table.py",
       "----NOT fully working YET----",
       "module4_Simple_Methods/ex01/age.py",
-      "module3_Better_Input_Validation/ex01/multiplication_table.py",
       "module3_Better_Input_Validation/ex02/i_got_that.py",
       "----NOT interactible YET----",
       "module8_Better_Classes/ex05/scope_that.py"
