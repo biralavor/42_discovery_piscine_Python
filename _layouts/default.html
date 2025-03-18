@@ -40,7 +40,7 @@
     <li>Python is a Beginner's Language − Supports a wide range of applications.</li>
   </ul>
 
-  <h1>Interactive Python Terminal</h1>
+  <h2>Interactive Python Terminal</h2>
   <!-- Status sign and Start button in a flex container -->
   <div class="status-container">
     <div id="status-indicator" class="status-indicator"></div>
@@ -48,7 +48,7 @@
     <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
   </div>
   <br><br>
-  <textarea id="python-code" rows="10" cols="40">print("Hello from Bira Lavor!")</textarea>
+  <textarea id="python-code" rows="10" cols="40">print("Hi! This is Bira Lavor!")</textarea>
   <br>
   
   <!-- These buttons are initially disabled -->
@@ -93,11 +93,11 @@
     }
 
     async function getModalInput(promptText) {
-// Optionally, append the prompt text to your output area if you want it visible there:
+      // Optionally, append the prompt text to your output area if you want it visible there:
       document.getElementById("output").textContent += promptText;
-// Set the prompt text inside the modal
+      // Set the prompt text inside the modal
       document.getElementById("input-prompt").textContent = promptText;
-// Show the modal
+      // Show the modal
       document.getElementById("input-modal").style.display = "block";
       window.modalInputPromise = new Promise((resolve) => {
         window.resolveModalInput = resolve;
@@ -115,6 +115,39 @@
       `);
     }
 
+    // A JavaScript function to show an error in your dialog box.
+    function showErrorDialog(msg) {
+      // For instance, update a dedicated error container or simply use alert:
+      alert("Invalid input -> " + msg);
+      // Or, if you want to use a modal dialog element, update its content and display it.
+    }
+
+    async function setupCustomInputAndPrintOverride() {
+      // Override input (if desired) and print. The new print will forward messages that contain
+      // "Your input wasn't a number" to our showErrorDialog() JS function.
+      await pyodide.runPythonAsync(`
+        import builtins, js
+
+        # Save the original print, if not already saved.
+        if not hasattr(builtins, '__original_print'):
+            builtins.__original_print = print
+
+        def custom_print(*args, **kwargs):
+            # Combine all arguments into one string.
+            s = " ".join(str(arg) for arg in args)
+            # Check if this is the error message we want to forward.
+            if "Your input wasn't a number" in s:
+                js.showErrorDialog(s)
+            # Also print normally.
+            builtins.__original_print(*args, **kwargs)
+
+        builtins.print = custom_print
+
+        # For input, using the synchronous js.prompt (or your custom modal) as before.
+        builtins.input = lambda prompt="": js.prompt(prompt)
+      `);
+    }
+
     async function startInterpreter() {
       // Load Pyodide if not already loaded, and display a green light indicator
       if (!window.pyodide) {
@@ -122,7 +155,8 @@
         window.pyodide = await loadPyodide();
         document.getElementById("status-indicator").style.backgroundColor = "green";
         document.getElementById("start-interpreter").textContent = "Python Interpreter is Running";
-        await setupCustomInput();
+        // await setupCustomInput();
+        await setupCustomInputAndPrintOverride();
         document.getElementById("run-text").disabled = false;
       }
     }
@@ -156,9 +190,9 @@
       "----working----",
       "module8_Better_Classes/ex03/greetings_for_all.py",
       "module8_Better_Classes/ex01/upcase_it.py",
+      "module3_Better_Input_Validation/ex01/multiplication_table.py",
       "----NOT fully working YET----",
       "module4_Simple_Methods/ex01/age.py",
-      "module3_Better_Input_Validation/ex01/multiplication_table.py",
       "module3_Better_Input_Validation/ex02/i_got_that.py",
       "----NOT interactible YET----",
       "module8_Better_Classes/ex05/scope_that.py"
