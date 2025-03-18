@@ -28,7 +28,7 @@ class multiplicationTable:
         nbr = int(nbr)
         break
       except ValueError :
-        sys.stderr.write(f"Your input '{nbr}' wasn't a number. Try again!\n")
+        sys.stderr.write(f"'{nbr}' wasn't a number. Try again!\n")
     return nbr
 
   def multiplyIt(self, nbr):
