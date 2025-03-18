@@ -48,11 +48,12 @@
     <button id="start-interpreter" onclick="startInterpreter()">Start Python Terminal Now</button>
   </div>
   <br><br>
-  <textarea id="python-code" rows="10" cols="40">print("Hi! This is Bira Lavor!")</textarea>
+  <textarea id="user-python-code" rows="7" cols="45">Teste here</textarea>
   <br>
   
   <!-- These buttons are initially disabled -->
   <button id="run-text" onclick="runPython()" disabled>Test any Python Code</button>
+  <pre id="output"></pre>
   
   
 
@@ -65,7 +66,6 @@
     <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
   </div>
 
-  <pre id="output"></pre>
 
   <!-- Modal for custom input (if needed) -->
   <div id="input-modal" style="display: none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -117,34 +117,44 @@
 
     // A JavaScript function to show an error in your dialog box.
     function showErrorDialog(msg) {
-      // For instance, update a dedicated error container or simply use alert:
+      // Clear any previous output if desired
+      document.getElementById("output").textContent = "";
+      // Show the error message via an alert or update a dedicated error container.
       alert("Invalid input -> " + msg);
-      // Or, if you want to use a modal dialog element, update its content and display it.
     }
 
     async function setupCustomInputAndPrintOverride() {
       // Override input (if desired) and print. The new print will forward messages that contain
       // "Your input wasn't a number" to our showErrorDialog() JS function.
       await pyodide.runPythonAsync(`
-        import builtins, js
+        import builtins, js, sys
 
-        # Save the original print, if not already saved.
+        # Save the original print if not already saved.
         if not hasattr(builtins, '__original_print'):
             builtins.__original_print = print
 
         def custom_print(*args, **kwargs):
-            # Combine all arguments into one string.
             s = " ".join(str(arg) for arg in args)
-            # Check if this is the error message we want to forward.
+            # Forward errors with the specific message to JS
             if "Your input wasn't a number" in s:
                 js.showErrorDialog(s)
-            # Also print normally.
             builtins.__original_print(*args, **kwargs)
 
         builtins.print = custom_print
 
-        # For input, using the synchronous js.prompt (or your custom modal) as before.
+        # Use js.prompt as a synchronous input for now.
         builtins.input = lambda prompt="": js.prompt(prompt)
+
+        # Create a custom stderr redirector that calls our JS function.
+        class JSStdErr:
+            def write(self, s):
+                if s.strip():
+                    # Optionally, clear prior output
+                    js.showErrorDialog(s)
+            def flush(self):
+                pass
+
+        sys.stderr = JSStdErr()
       `);
     }
 
@@ -166,7 +176,7 @@
         alert("Please start the Python interpreter first.");
         return;
       }
-      let code = document.getElementById("python-code").value;
+      let code = document.getElementById("user-python-code").value;
       try {
         // Prepare a stdout capture
         await pyodide.runPythonAsync(`
