@@ -21,7 +21,7 @@ class milestoneCalculator:
 
   def input_validation(self):
     while True:
-      nbr = input('Please, tell me your age: ')
+      nbr = input('Please, tell me your age: (you can try a negative number, a character or empty input also)')
       try:
         users_age = int(nbr)
         break
