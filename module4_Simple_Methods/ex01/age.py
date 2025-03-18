@@ -26,7 +26,10 @@ class milestoneCalculator:
         users_age = int(nbr)
         break
       except ValueError:
-        sys.stderr.write(f"'{nbr}' wasn't a number. Try again!\n")
+        if nbr == "":
+          sys.stderr.write("You didn't enter anything. T.T!\n")
+        else:
+          sys.stderr.write(f"'{nbr}' wasn't a number. Try again!\n")
     return users_age
   
   def calculator_runner(self, users_age, milestone):
