@@ -23,11 +23,12 @@ class multiplicationTable:
 
   def input_validation(self):
     while True :
+      nbr = self.input_catcher()
       try :
-        nbr = int(self.input_catcher())
+        nbr = int(nbr)
         break
       except ValueError :
-        sys.stderr.write("Your input wasn't a number. Try again!\n")
+        sys.stderr.write(f"Your input '{nbr}' wasn't a number. Try again!\n")
     return nbr
 
   def multiplyIt(self, nbr):
