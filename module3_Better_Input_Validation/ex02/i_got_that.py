@@ -54,8 +54,8 @@ class iGotThat:
 
 if __name__ == "__main__":
   saved_notes = []
-  arg_input = iGotThat(saved_notes)
-  saved_notes.append(arg_input.input_catcher())
-  saved_notes = arg_input.save_my_notes()
-  saved_notes = arg_input.replace_if_empty(saved_notes)
-  arg_input.saved_notes_output(saved_notes)
+  digital_post_it = iGotThat(saved_notes)
+  saved_notes.append(digital_post_it.input_catcher())
+  saved_notes = digital_post_it.save_my_notes()
+  saved_notes = digital_post_it.replace_if_empty(saved_notes)
+  digital_post_it.saved_notes_output(saved_notes)
