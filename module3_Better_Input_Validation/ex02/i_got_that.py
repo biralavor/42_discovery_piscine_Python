@@ -28,11 +28,17 @@ class iGotThat:
     return user_input
 
   def saved_notes_output(self, saved_notes):
-    print('\n>>>>>>>>>>>>>>>>>>>>>>>>>')
-    print('Here is your saved notes:')
-    for idx in range(0, len(saved_notes)):
+    notes_msg = 'Here is your saved notes:'
+    notes_msg_len = len(notes_msg)
+    for _ in range(0, notes_msg_len):
+      print('>', end="")
+    print("\n" + notes_msg)
+    for idx in range(len(saved_notes)):
       print(f'{idx}. {saved_notes[idx]}')
       idx += 1
+    for _ in range(notes_msg_len):
+      print('>', end="")
+    print('')
 
   def save_my_notes(self) :
     while True:
@@ -40,7 +46,7 @@ class iGotThat:
         print('No notes saved.')
         exit()
       else:
-        users_note = input('I got that! Anything else? Say "STOP" to end it. ')
+        users_note = input('I got that! Anything else? Say "STOP" to end it : ')
         if users_note == 'STOP':
           break
       self.saved_notes.append(users_note)
