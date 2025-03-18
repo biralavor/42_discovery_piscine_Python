@@ -1,4 +1,4 @@
-#!/usr/bin/python3.8
+#!/usr/bin/python3.12
 
 # **************************************************************************** #
 #                                                                              #
@@ -12,37 +12,44 @@
 #                                                                              #
 # **************************************************************************** #
 
-def replace_if_empty(saved_notes) :
-  for idx in range(0, len(saved_notes)) :
-    if saved_notes[idx] == '' :
-      saved_notes.remove(saved_notes[idx])
-      saved_notes.insert(idx, ' ::  ::')
-  return saved_notes
+class iGotThat:
+  def __init__(self, saved_notes):
+    self.saved_notes = saved_notes
 
-def saved_notes_output(saved_notes) :
-  print('\n>>>>>>>>>>>>>>>>>>>>>>>>>')
-  print('Here is your saved notes:')
-  for idx in range(0, len(saved_notes)) :
-    print(f'{idx}. {saved_notes[idx]}')
-    idx += 1
+  def replace_if_empty(self, saved_notes):
+    for idx in range(0, len(self.saved_notes)):
+      if self.saved_notes[idx] == '' :
+        self.saved_notes.remove(self.saved_notes[idx])
+        self.saved_notes.insert(idx, ': : : : : :')
+    return self.saved_notes
 
-def i_got_that() :
-  while True :
-    if saved_notes[0] == 'STOP' :
-      print('No notes saved.')
-      exit()
-    else :
-      users_note = input('I got that! Anything else? : ')
-      if users_note == 'STOP' :
-        break
-    saved_notes.append(users_note)
-  return saved_notes
+  def input_catcher(self):
+    user_input = input('What you gotta say? : ')
+    return user_input
 
-if __name__ == "__main__" :
+  def saved_notes_output(self, saved_notes):
+    print('\n>>>>>>>>>>>>>>>>>>>>>>>>>')
+    print('Here is your saved notes:')
+    for idx in range(0, len(saved_notes)):
+      print(f'{idx}. {saved_notes[idx]}')
+      idx += 1
+
+  def save_my_notes(self) :
+    while True:
+      if self.saved_notes[0] == 'STOP':
+        print('No notes saved.')
+        exit()
+      else:
+        users_note = input('I got that! Anything else? Say "STOP" to end it. ')
+        if users_note == 'STOP':
+          break
+      self.saved_notes.append(users_note)
+    return self.saved_notes
+
+if __name__ == "__main__":
   saved_notes = []
-  users_note = input('What you gotta say? : ')
-  saved_notes.append(users_note)
-  saved_notes = i_got_that()
-  saved_notes = replace_if_empty(saved_notes)
-  saved_notes_output(saved_notes)
-exit()
+  arg_input = iGotThat(saved_notes)
+  saved_notes.append(arg_input.input_catcher())
+  saved_notes = arg_input.save_my_notes()
+  saved_notes = arg_input.replace_if_empty(saved_notes)
+  arg_input.saved_notes_output(saved_notes)
