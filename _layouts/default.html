@@ -59,11 +59,11 @@
 
   <!-- Dropdown for Study Files -->
   <div id="study-files-dropdown-container">
-    <label for="study-files-dropdown">Select study file:</label>
+    <label for="study-files-dropdown">Select a study file:</label>
     <select id="study-files-dropdown">
       <option value="">-- Select file to run --</option>
     </select>
-    <button onclick="runSelectedStudyFile()">Run Selected Study File</button>
+    <button onclick="runSelectedStudyFile()">Run this one!</button>
   </div>
 
 
@@ -80,6 +80,15 @@
     // Global variables for modal input handling
     window.modalInputPromise = null;
     window.resolveModalInput = null;
+    document.getElementById("user-python-code").value = `
+greeting_msg= "Hi! This is Bira Lavor!"
+lenght_msg = len(greeting_msg) + 2
+for idx in range(lenght_msg):
+  print("*", end="")
+  if idx == lenght_msg - 1:
+    print("*")
+print("* " + greeting_msg + " *")`;
+    // Global variables for modal input handling
     // Store current study file that was successfully run
     let currentStudyFile = "";
 
@@ -211,7 +220,7 @@
     // Populate the dropdown with study files
     function populateStudyFilesDropdown() {
       const dropdown = document.getElementById("study-files-dropdown");
-      dropdown.innerHTML = "<option value=''>-- Select file to run --</option>";
+      dropdown.innerHTML = "<option value=''>-- Select a file to run --</option>";
       studyFiles.forEach((filePath) => {
         const moduleName = (filePath.split('/').slice(-3, 5)[0]);
         const fileName = filePath.split('/').pop();
