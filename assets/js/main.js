@@ -71,7 +71,9 @@ function ansiToHtml(text) {
 }
 
 function showIntro() {
-  printToTerminal(ansiTitle() + introText(), true);
+  // Render ANSI title in the header
+  document.querySelector(".terminal-header").innerHTML = ansiToHtml(ansiTitle());
+  printToTerminal(introText(), false);
   document.getElementById("terminal-input").style.display = "none";
   document.getElementById("run-pyodide-btn").style.display = "inline-block";
   terminalState = "intro";
