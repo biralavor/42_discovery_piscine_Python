@@ -1,0 +1,87 @@
+/* style.css - Terminal style for Python Studies */
+body {
+  background: #18181a;
+  color: #e5e5e5;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  margin: 0;
+  min-height: 100vh;
+}
+.terminal {
+  background: #232326;
+  border-radius: 8px;
+  box-shadow: 0 0 16px #000a;
+  max-width: 850px;
+  margin: 40px auto;
+  padding: 0 0 24px 0;
+  overflow: hidden;
+}
+.terminal-header {
+  background: #18181a;
+  padding: 16px 24px 8px 24px;
+  font-size: 1.2em;
+  color: #00ff5f;
+  font-weight: bold;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  white-space: pre;
+}
+.terminal-body {
+  padding: 16px 24px;
+  min-height: 420px; /* was 320px, now +100px */
+  font-size: 1em;
+  line-height: 1.5;
+  background: #232326;
+}
+.terminal-input {
+  width: 100%;
+  background: #18181a;
+  color: #e5e5e5;
+  border: none;
+  font-family: inherit;
+  font-size: 1em;
+  padding: 8px 0;
+  outline: none;
+}
+.terminal-btn {
+  background: #00ff5f;
+  color: #18181a;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: inherit;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 16px 0 0 0;
+  transition: background 0.2s;
+}
+.terminal-btn:disabled {
+  background: #444;
+  color: #888;
+  cursor: not-allowed;
+}
+.terminal-cursor {
+  display: inline-block;
+  width: 10px;
+  background: #00ff5f;
+  animation: blink 1s steps(1) infinite;
+  height: 1.1em;
+  vertical-align: bottom;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.terminal-menu {
+  color: #00dfff;
+  margin: 16px 0 8px 0;
+  font-weight: bold;
+}
+.terminal-output {
+  color: #e5e5e5;
+  margin: 8px 0 0 0;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+.terminal-link {
+  color: #ffb300;
+  text-decoration: underline;
+}
