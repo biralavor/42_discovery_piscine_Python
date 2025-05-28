@@ -13,6 +13,17 @@ let pyodideLoaded = false;
 let terminalState = "intro"; // intro, menu, running, output
 let selectedFileIdx = 0;
 
+// Pre-generated briefs for each study file
+const studyFileBriefs = {
+  "module8_Better_Classes/ex03/greetings_for_all.py": "Prints personalized greetings for all users in a list using classes.",
+  "module8_Better_Classes/ex01/upcase_it.py": "Converts input strings to uppercase using a class method.",
+  "module8_Better_Classes/ex05/scope_that.py": "Demonstrates variable scope and class/instance attributes.",
+  "module4_Simple_Methods/ex01/age.py": "Calculates and displays age based on user input.",
+  "module3_Better_Input_Validation/ex01/multiplication_table.py": "Prints a multiplication table for a given number with input validation.",
+  "module3_Better_Input_Validation/ex02/i_got_that.py": "Checks if a user-provided value exists in a predefined list.",
+  "module8_Better_Classes/ex04/methods_everywhere.py": "Shows how to use methods in different class contexts."
+};
+
 function ansiTitle() {
   return `\u001b[1;32m
              _   _                       _             _ _           
@@ -36,6 +47,9 @@ function menuText() {
   studyFiles.forEach((file, idx) => {
     menu += (idx === selectedFileIdx ? "> " : "  ") + file + "\n";
   });
+  // Add the brief for the currently selected file
+  const brief = studyFileBriefs[studyFiles[selectedFileIdx]] || "No description available.";
+  menu += "\nStudy file brief:\n" + brief;
   return menu;
 }
 
