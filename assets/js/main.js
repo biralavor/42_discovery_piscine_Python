@@ -121,7 +121,7 @@ async function showSourceCode() {
 }
 
 function listenForMenuKeys() {
-  document.onkeydown = function(e) {
+  document.addEventListener('keydown', function(e) {
     if (terminalState === "menu") {
       if (e.key === "ArrowUp") {
         selectedFileIdx = (selectedFileIdx - 1 + studyFiles.length) % studyFiles.length;
