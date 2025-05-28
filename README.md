@@ -6,3 +6,11 @@ Please, check this [github-pages](https://biralavor.github.io/42_discovery_pisci
 
 > [!NOTE]
 > This Github Page is under development, but you can still test it
+
+---
+
+## Deployment notes
+- This site is a static HTML/JS/CSS site. No Jekyll or static site generator is used.
+- The main entry point is `index.html` at the root of the repository.
+- All assets and study files are loaded directly by the browser.
+- To deploy, simply push to the `main` branch and GitHub Pages will serve the site from the root.
