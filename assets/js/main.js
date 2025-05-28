@@ -149,7 +149,7 @@ function listenForMenuKeys() {
         showMenu();
       }
     }
-  };
+  });
 }
 
 // Store last output for back navigation from source view
