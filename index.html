@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Studies Terminal</title>
+  <link rel="stylesheet" href="/assets/css/terminal.css">
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <!-- ANSI title will be rendered here by JS -->
+    </div>
+    <div class="terminal-body">
+      <div id="terminal-output" class="terminal-output"></div>
+      <input id="terminal-input" class="terminal-input" style="display:none" autocomplete="off" />
+      <button id="run-pyodide-btn" class="terminal-btn" onclick="runPyodide()">Start Pyodide</button>
+    </div>
+  </div>
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
