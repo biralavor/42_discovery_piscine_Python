@@ -1,5 +1,6 @@
 # 42_discovery_piscine_Python
-WIP - Python Immersion at 42 São Paulo
+This is my study files repo done at Python Immersion at 42 São Paulo
+All files were done with zero Python knowledge, within 10 business days.
 
 ## GitHub Page for my Python Studies
 Please, check this [github-pages](https://biralavor.github.io/42_discovery_piscine_Python/) to test my Python code in a live mode :)
