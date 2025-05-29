@@ -155,11 +155,33 @@ function listenForMenuKeys() {
 // Store last output for back navigation from source view
 let lastOutputText = "";
 
+async function setupPyodideInputPrompt() {
+  if (!window.pyodide) return;
+  await window.pyodide.runPythonAsync(`
+import builtins
+import js
+
+def js_input(prompt=""):
+    js.showInputPrompt(prompt)
+    return js.prompt(prompt)
+
+builtins.input = js_input
+`);
+}
+
+// Show the input prompt message in the terminal output
+window.showInputPrompt = function(promptMsg) {
+  const output = document.getElementById("terminal-output");
+  output.textContent += "\n" + (promptMsg || "Input: ");
+};
+
+// Patch runSelectedStudyFile to call setupPyodideInputPrompt before running code
 async function runSelectedStudyFile() {
   terminalState = "running";
   printToTerminal("Running: " + studyFiles[selectedFileIdx] + "...\n");
   try {
     await pyodide.runPythonAsync(`import sys\nfrom io import StringIO\nsys.stdout = StringIO()`);
+    await setupPyodideInputPrompt();
     const response = await fetch(baseURL + "/" + studyFiles[selectedFileIdx]);
     if (!response.ok) throw new Error("File not found");
     const code = await response.text();
